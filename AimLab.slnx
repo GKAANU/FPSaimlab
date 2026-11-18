@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AimLab.AimAssist/AimLab.AimAssist.csproj" />
+    <Project Path="src/AimLab.Configuration/AimLab.Configuration.csproj" />
+    <Project Path="src/AimLab.Core/AimLab.Core.csproj" />
+    <Project Path="src/AimLab.Entities/AimLab.Entities.csproj" />
+    <Project Path="src/AimLab.Mathematics/AimLab.Mathematics.csproj" />
+    <Project Path="src/AimLab.Memory/AimLab.Memory.csproj" />
+    <Project Path="src/AimLab.Runtime/AimLab.Runtime.csproj" />
+    <Project Path="src/AimLab.Simulation/AimLab.Simulation.csproj" />
+    <Project Path="src/AimLab.Targeting/AimLab.Targeting.csproj" />
+    <Project Path="src/AimLab.Telemetry/AimLab.Telemetry.csproj" />
+    <Project Path="src/AimLab.UI/AimLab.UI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AimLab.Tests/AimLab.Tests.csproj" />
+  </Folder>
+</Solution>

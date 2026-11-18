@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AimLab.Core\AimLab.Core.csproj" />
+    <ProjectReference Include="..\AimLab.Mathematics\AimLab.Mathematics.csproj" />
+    <ProjectReference Include="..\AimLab.Memory\AimLab.Memory.csproj" />
+    <ProjectReference Include="..\AimLab.Entities\AimLab.Entities.csproj" />
+    <ProjectReference Include="..\AimLab.Simulation\AimLab.Simulation.csproj" />
+    <ProjectReference Include="..\AimLab.Targeting\AimLab.Targeting.csproj" />
+    <ProjectReference Include="..\AimLab.AimAssist\AimLab.AimAssist.csproj" />
+    <ProjectReference Include="..\AimLab.Telemetry\AimLab.Telemetry.csproj" />
+    <ProjectReference Include="..\AimLab.Configuration\AimLab.Configuration.csproj" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
+  </ItemGroup>
+</Project>

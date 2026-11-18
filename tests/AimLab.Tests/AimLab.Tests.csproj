@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AimLab.Core\AimLab.Core.csproj" />
+    <ProjectReference Include="..\..\src\AimLab.Mathematics\AimLab.Mathematics.csproj" />
+    <ProjectReference Include="..\..\src\AimLab.Memory\AimLab.Memory.csproj" />
+    <ProjectReference Include="..\..\src\AimLab.Entities\AimLab.Entities.csproj" />
+    <ProjectReference Include="..\..\src\AimLab.Simulation\AimLab.Simulation.csproj" />
+    <ProjectReference Include="..\..\src\AimLab.Targeting\AimLab.Targeting.csproj" />
+    <ProjectReference Include="..\..\src\AimLab.AimAssist\AimLab.AimAssist.csproj" />
+    <ProjectReference Include="..\..\src\AimLab.Telemetry\AimLab.Telemetry.csproj" />
+    <ProjectReference Include="..\..\src\AimLab.Configuration\AimLab.Configuration.csproj" />
+    <ProjectReference Include="..\..\src\AimLab.Runtime\AimLab.Runtime.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

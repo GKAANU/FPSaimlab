@@ -1,0 +1,105 @@
+<Window x:Class="AimLab.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:AimLab.UI"
+        Title="AimLab — Offline Aim Assist Research Simulator"
+        Width="1280" Height="820" MinWidth="980" MinHeight="640"
+        Background="{StaticResource Bg}" WindowStartupLocation="CenterScreen">
+    <Grid Margin="16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="320" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Configuration -->
+        <Border Style="{StaticResource Card}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="AIM ASSIST" Style="{StaticResource Header}" Margin="0,0,0,6" />
+                    <CheckBox Content="Enabled" IsChecked="{Binding Settings.Enabled}" />
+                    <CheckBox Content="Visibility check" IsChecked="{Binding Settings.VisibilityCheck}" />
+                    <CheckBox Content="Require activation key" IsChecked="{Binding Settings.RequireActivationKey}" />
+
+                    <TextBlock Text="ACTIVATION KEY" Style="{StaticResource Header}" />
+                    <ComboBox ItemsSource="{Binding ActivationKeys}" SelectedItem="{Binding Settings.ActivationKey}" />
+
+                    <DockPanel Margin="0,14,0,0">
+                        <TextBlock Text="{Binding Settings.Fov, StringFormat={}{0:F0}°}" DockPanel.Dock="Right" Style="{StaticResource Mono}" />
+                        <TextBlock Text="FIELD OF VIEW" Style="{StaticResource Header}" Margin="0" />
+                    </DockPanel>
+                    <Slider Minimum="1" Maximum="180" Value="{Binding Settings.Fov}" SmallChange="1" LargeChange="10" />
+
+                    <DockPanel Margin="0,8,0,0">
+                        <TextBlock Text="{Binding Settings.Smoothing, StringFormat={}{0:F1}}" DockPanel.Dock="Right" Style="{StaticResource Mono}" />
+                        <TextBlock Text="SMOOTHING" Style="{StaticResource Header}" Margin="0" />
+                    </DockPanel>
+                    <Slider Minimum="1" Maximum="50" Value="{Binding Settings.Smoothing}" SmallChange="0.5" LargeChange="5" />
+
+                    <DockPanel Margin="0,8,0,0">
+                        <TextBlock Text="{Binding Settings.AcquireThresholdDegrees, StringFormat={}{0:F1}°}" DockPanel.Dock="Right" Style="{StaticResource Mono}" />
+                        <TextBlock Text="ACQUIRE THRESHOLD" Style="{StaticResource Header}" Margin="0" />
+                    </DockPanel>
+                    <Slider Minimum="0.1" Maximum="10" Value="{Binding Settings.AcquireThresholdDegrees}" SmallChange="0.1" LargeChange="1" />
+
+                    <TextBlock Text="TARGET PRIORITY" Style="{StaticResource Header}" />
+                    <ComboBox ItemsSource="{Binding Priorities}" SelectedItem="{Binding Settings.Priority}" />
+
+                    <TextBlock Text="BODY REGION" Style="{StaticResource Header}" />
+                    <ComboBox ItemsSource="{Binding Regions}" SelectedItem="{Binding Settings.Region}" />
+
+                    <TextBlock Text="DEBUG VISUALIZATION" Style="{StaticResource Header}" />
+                    <CheckBox Content="FOV cone" IsChecked="{Binding ShowFovCone}" />
+                    <CheckBox Content="Other candidates" IsChecked="{Binding ShowCandidates}" />
+                    <CheckBox Content="Hidden enemies" IsChecked="{Binding ShowHidden}" />
+
+                    <WrapPanel Margin="0,16,0,0">
+                        <Button Content="Save settings" Command="{Binding SaveSettingsCommand}" />
+                        <Button Content="{Binding RunLabel}" Command="{Binding ToggleRunningCommand}" />
+                    </WrapPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Radar -->
+        <Border Grid.Column="1" Style="{StaticResource Card}" Margin="16,0" Padding="0" ClipToBounds="True">
+            <Grid>
+                <local:RadarView x:Name="Radar" />
+                <TextBlock Margin="12" VerticalAlignment="Top" Foreground="{StaticResource Muted}" FontSize="11"
+                           Text="Arrow keys: turn camera · hold activation key: assist · green = you, red = enemy, blue = team, ring = hidden" />
+            </Grid>
+        </Border>
+
+        <!-- Metrics -->
+        <Border Grid.Column="2" Style="{StaticResource Card}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="ENTITIES" Style="{StaticResource Header}" Margin="0,0,0,6" />
+                    <TextBlock Text="{Binding EntitySummary}" Style="{StaticResource Mono}" TextWrapping="Wrap" />
+
+                    <TextBlock Text="PERFORMANCE" Style="{StaticResource Header}" />
+                    <TextBlock Text="{Binding Performance}" Style="{StaticResource Mono}" TextWrapping="Wrap" />
+
+                    <TextBlock Text="CURRENT TARGET" Style="{StaticResource Header}" />
+                    <TextBlock Text="{Binding TargetInfo}" Style="{StaticResource Mono}" TextWrapping="Wrap" />
+
+                    <TextBlock Text="TELEMETRY" Style="{StaticResource Header}" />
+                    <TextBlock Text="{Binding TelemetryInfo}" Style="{StaticResource Mono}" TextWrapping="Wrap" />
+
+                    <WrapPanel Margin="0,16,0,0">
+                        <Button Content="Export JSON" Command="{Binding ExportJsonCommand}" />
+                        <Button Content="Export CSV" Command="{Binding ExportCsvCommand}" />
+                        <Button Content="Reset" Command="{Binding ResetTelemetryCommand}" />
+                    </WrapPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Margin="2,10,0,0" Foreground="{StaticResource Muted}"
+                   Text="{Binding Status}" TextTrimming="CharacterEllipsis" />
+    </Grid>
+</Window>

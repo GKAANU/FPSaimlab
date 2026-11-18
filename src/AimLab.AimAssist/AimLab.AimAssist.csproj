@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AimLab.Core\AimLab.Core.csproj" />
+    <ProjectReference Include="..\AimLab.Mathematics\AimLab.Mathematics.csproj" />
+    <ProjectReference Include="..\AimLab.Entities\AimLab.Entities.csproj" />
+    <ProjectReference Include="..\AimLab.Targeting\AimLab.Targeting.csproj" />
+    <ProjectReference Include="..\AimLab.Configuration\AimLab.Configuration.csproj" />
+  </ItemGroup>
+</Project>
