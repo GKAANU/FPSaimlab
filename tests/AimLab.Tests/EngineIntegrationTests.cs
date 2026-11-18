@@ -40,7 +40,7 @@ public class EngineIntegrationTests
         Assert.Equal(last.Aim.After, engine.Process.World.CurrentView);
 
         var summary = engine.Telemetry.GetSummary();
-        Assert.Equal(640, summary.SampleCount);
+        Assert.Equal(640, summary.Session.SampleCount);
         Assert.True(summary.TargetAcquisitions > 0);
         Assert.NotEmpty(summary.AcquisitionTimes);
     }

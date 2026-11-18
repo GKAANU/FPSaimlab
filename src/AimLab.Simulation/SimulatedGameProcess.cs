@@ -16,9 +16,17 @@ public sealed class SimulatedGameProcess
         Publish();
     }
 
-    public SimulationOptions Options { get; }
+    public SimulationOptions Options { get; private set; }
 
-    public GameWorld World { get; }
+    public GameWorld World { get; private set; }
+
+    /// <summary>Replaces the world with a fresh one built from <paramref name="options"/> and republishes memory.</summary>
+    public void Reset(SimulationOptions options)
+    {
+        Options = options;
+        World = new GameWorld(options);
+        Publish();
+    }
 
     public SimulatedProcessMemory Memory { get; }
 

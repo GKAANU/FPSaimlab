@@ -18,8 +18,10 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         SimulationOptions? simulation = null,
         AimSettings? settings = null,
-        ILogger? logger = null)
+        ILogger? logger = null,
+        TrainingSettings? training = null)
     {
+        services.AddSingleton(training ?? new TrainingSettings());
         services.AddSingleton(simulation ?? new SimulationOptions());
         services.AddSingleton(settings ?? new AimSettings());
         services.AddSingleton(logger ?? Log.Logger);

@@ -18,6 +18,9 @@ public interface IEntityCache
 
     void Update(EntityReadResult read);
 
+    /// <summary>Forgets every tracked entity (used when a new session starts).</summary>
+    void Reset();
+
     TrackedEntity? Get(int id);
 }
 
@@ -85,6 +88,15 @@ public sealed class EntityCache : IEntityCache
         }
 
         Players = read.Players;
+    }
+
+    public void Reset()
+    {
+        _tracked.Clear();
+        Players = [];
+        InvalidCount = 0;
+        LastTick = 0;
+        LocalPlayer.Update(null);
     }
 
     public TrackedEntity? Get(int id) => _tracked.GetValueOrDefault(id);

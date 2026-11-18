@@ -1,19 +1,31 @@
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AimLab.Telemetry;
 
-/// <summary>Writes telemetry to JSON (summary + trajectory) and CSV (one row per sample).</summary>
+/// <summary>Writes one <see cref="TelemetrySnapshot"/> to JSON, or its samples to CSV (one row per tick).</summary>
 public static class TelemetryExporter
 {
-    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        WriteIndented = true,
+        Converters = { new JsonStringEnumConverter() },
+    };
 
-    public static void ExportJson(string path, TelemetrySummary summary, IReadOnlyList<TelemetrySample> samples)
+    public static void ExportJson(string path, TelemetrySnapshot snapshot)
     {
         EnsureDirectory(path);
         using var stream = File.Create(path);
-        JsonSerializer.Serialize(stream, new { ExportedAtUtc = DateTime.UtcNow, Summary = summary, Trajectory = samples }, JsonOptions);
+        JsonSerializer.Serialize(stream, new
+        {
+            ExportedAtUtc = DateTime.UtcNow,
+            snapshot.Metadata,
+            snapshot.Summary,
+            snapshot.Shots,
+            Trajectory = snapshot.Samples,
+        }, JsonOptions);
     }
 
     public static void ExportCsv(string path, IReadOnlyList<TelemetrySample> samples)
@@ -25,7 +37,7 @@ public static class TelemetryExporter
     public static string ToCsv(IReadOnlyList<TelemetrySample> samples)
     {
         var ci = CultureInfo.InvariantCulture;
-        var sb = new StringBuilder("time,tick,pitch,yaw,target_id,angular_error,aim_applied,angular_velocity,angular_acceleration\n");
+        var sb = new StringBuilder("time,tick,pitch,yaw,target_id,error_before,error_after,aim_applied,angular_velocity,angular_acceleration\n");
         foreach (var s in samples)
         {
             sb.Append(s.Time.ToString("F4", ci)).Append(',')
@@ -33,10 +45,11 @@ public static class TelemetryExporter
               .Append(s.Pitch.ToString("F4", ci)).Append(',')
               .Append(s.Yaw.ToString("F4", ci)).Append(',')
               .Append(s.TargetId?.ToString(ci)).Append(',')
-              .Append(s.AngularError?.ToString("F4", ci)).Append(',')
+              .Append(s.ErrorBefore?.ToString("F4", ci)).Append(',')
+              .Append(s.ErrorAfter?.ToString("F4", ci)).Append(',')
               .Append(s.AimApplied ? '1' : '0').Append(',')
-              .Append(s.AngularVelocity.ToString("F4", ci)).Append(',')
-              .Append(s.AngularAcceleration.ToString("F4", ci)).Append('\n');
+              .Append(s.AngularVelocity?.ToString("F4", ci)).Append(',')
+              .Append(s.AngularAcceleration?.ToString("F4", ci)).Append('\n');
         }
 
         return sb.ToString();

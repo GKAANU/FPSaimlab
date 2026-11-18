@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using AimLab.Configuration;
 using AimLab.Core;
+using AimLab.Mathematics;
 using AimLab.Runtime;
 using AimLab.Simulation;
 using Point = System.Windows.Point;
@@ -72,14 +73,16 @@ public sealed class RadarView : FrameworkElement
 
         if (ShowFovCone && Settings is { } s)
         {
-            var a = (yaw - s.Fov / 2) * MathF.PI / 180;
-            var b = (yaw + s.Fov / 2) * MathF.PI / 180;
+            // Circular sector drawn as two arcs so 180° stays a half disc instead of collapsing.
+            var (start, mid, end) = FovSector.Compute(yaw, s.Fov, reach);
+            var r = reach * scale;
             var geometry = new StreamGeometry();
             using (var ctx = geometry.Open())
             {
                 ctx.BeginFigure(origin, true, true);
-                ctx.LineTo(Map(local.Origin + new Vector3(MathF.Cos(a), MathF.Sin(a), 0) * reach), false, false);
-                ctx.LineTo(Map(local.Origin + new Vector3(MathF.Cos(b), MathF.Sin(b), 0) * reach), false, false);
+                ctx.LineTo(Map(local.Origin + new Vector3(start, 0)), false, false);
+                ctx.ArcTo(Map(local.Origin + new Vector3(mid, 0)), new Size(r, r), 0, false, SweepDirection.Counterclockwise, false, false);
+                ctx.ArcTo(Map(local.Origin + new Vector3(end, 0)), new Size(r, r), 0, false, SweepDirection.Counterclockwise, false, false);
             }
 
             geometry.Freeze();

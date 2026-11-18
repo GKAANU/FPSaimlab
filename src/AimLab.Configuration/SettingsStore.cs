@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace AimLab.Configuration;
 
-/// <summary>Loads and saves <see cref="AimSettings"/> as JSON.</summary>
+/// <summary>Loads and saves settings objects as JSON.</summary>
 public static class SettingsStore
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -12,25 +12,27 @@ public static class SettingsStore
         Converters = { new JsonStringEnumConverter() },
     };
 
+    public static AimSettings Load(string path) => Load<AimSettings>(path);
+
     /// <summary>Returns defaults when the file is missing or unreadable.</summary>
-    public static AimSettings Load(string path)
+    public static T Load<T>(string path) where T : class, new()
     {
         if (!File.Exists(path))
         {
-            return new AimSettings();
+            return new T();
         }
 
         try
         {
-            return JsonSerializer.Deserialize<AimSettings>(File.ReadAllText(path), JsonOptions) ?? new AimSettings();
+            return JsonSerializer.Deserialize<T>(File.ReadAllText(path), JsonOptions) ?? new T();
         }
-        catch (JsonException)
+        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
         {
-            return new AimSettings();
+            return new T();
         }
     }
 
-    public static void Save(AimSettings settings, string path)
+    public static void Save<T>(T settings, string path)
     {
         var dir = Path.GetDirectoryName(Path.GetFullPath(path));
         if (!string.IsNullOrEmpty(dir))

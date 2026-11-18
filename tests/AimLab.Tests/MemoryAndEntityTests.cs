@@ -33,7 +33,7 @@ public class MemoryAndEntityTests
         Assert.Equal(1, read.LocalPlayer!.Id);
         Assert.Equal(7, read.Players.Count);
         Assert.Equal(4, read.Players.Count(p => p.Team == Team.Attackers));
-        Assert.All(read.Players, p => Assert.Equal(p.Origin + new Vector3(0, 0, SimPlayer.EyeHeight), p.HeadPosition));
+        Assert.All(read.Players, p => Assert.Equal(p.Origin + new Vector3(0, 0, process.Options.EyeHeight), p.HeadPosition));
     }
 
     [Fact]

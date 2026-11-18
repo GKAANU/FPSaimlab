@@ -15,6 +15,8 @@ public partial class App : Application
 
     public static string SettingsPath => Path.Combine(DataDirectory, "settings.json");
 
+    public static string TrainingPath => Path.Combine(DataDirectory, "training.json");
+
     private ServiceProvider? _services;
 
     protected override void OnStartup(StartupEventArgs e)
@@ -34,13 +36,16 @@ public partial class App : Application
         };
 
         var settings = SettingsStore.Load(SettingsPath);
+        var training = SettingsStore.Load<TrainingSettings>(TrainingPath);
         _services = new ServiceCollection()
-            .AddAimLab(new SimulationOptions(), settings, Log.Logger)
+            .AddAimLab(new SimulationOptions(), settings, Log.Logger, training)
             .AddSingleton<MainViewModel>()
             .AddSingleton<MainWindow>()
             .BuildServiceProvider();
 
         Log.Information("AimLab starting; settings from {Path}", SettingsPath);
+        // Opens in untimed free play of the saved scenario; "Start session" begins a timed run.
+        _services.GetRequiredService<MainViewModel>().StartSession(timed: false);
         _services.GetRequiredService<SimulationHost>().Start();
         _services.GetRequiredService<MainWindow>().Show();
     }
